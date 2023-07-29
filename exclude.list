@@ -51,5 +51,11 @@
 /var/cache/xbps/*
 /var/cache/zypp/*
 /var/cache/edb/*
-/home/andrei/DOWNLOADS/
-/home/andrei/archives/
+/home/andrei/DOWNLOADS/***
+/home/andrei/Downloads/***
+/home/andrei/archives/***
+/home/andrei/.gzdoom/***
+/home/andrei/.local/share/Steam/***
+/home/andrei/.steam/***
+/home/andrei/.local/share/atlauncher/***
+/run/timeshift/5020/backup/var/lib/flatpak/***
