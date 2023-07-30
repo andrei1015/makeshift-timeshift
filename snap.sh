@@ -12,8 +12,6 @@ snapshot() {
 
 snapshot
 
-
-# Uncomment these lines for debugging if needed
 # echo "${current_folder}"
 # echo "${root}"
 # echo "${folder}"
