@@ -69,7 +69,6 @@ clean_everything() {
             echo "Operation canceled."
         ;;
     esac
-    rm -rf ${root}/*
 }
 
 clean_archives() {
@@ -87,6 +86,29 @@ clean_archives() {
             echo "Operation canceled."
         ;;
     esac
+}
+
+restore() {
+    read -p "Enter the backup directory: " backup
+    
+    if [ -d "$backup" ]; then
+        read -p "Are you 100% sure you want to restore your system? (y/N): " choice
+        
+        case "$choice" in
+            [Yy])
+                # rsync --exclude="${root}" "${backup-folder}" /
+                echo "Restoring from backup: $backup"
+            ;;
+            [Nn])
+                echo "Operation canceled."
+            ;;
+            *)
+                echo "Operation canceled."
+            ;;
+        esac
+    else
+        echo "Backup directory not found: $backup"
+    fi
 }
 
 
@@ -107,12 +129,16 @@ while [[ $# -gt 0 ]]; do
             list
             shift
         ;;
-        -R|--clean-all)
+        -D|--clean-all)
             clean_everything
             shift
         ;;
-        -r|--clean-archives)
+        -d|--clean-archives)
             clean_archives
+            shift
+        ;;
+        -r|--restore)
+            restore
             shift
         ;;
         *)

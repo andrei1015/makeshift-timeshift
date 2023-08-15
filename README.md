@@ -1,6 +1,6 @@
 # Makeshift-Timeshift
 
-The idea behind Timeshift is pretty simple, but itdoesn't seem to be able to run in a terminal-only mode, XServer is a dependency, so I made the same thing, but for terminal-only situations.
+The idea behind Timeshift is pretty simple, but it doesn't seem to be able to run in a terminal-only mode, XServer is a dependency, so I made the same thing, but for terminal-only situations.
 
 ## Usage/Examples
 
@@ -12,13 +12,17 @@ This parameter is used to create a new snapshot
 
 List all currently available local snapshots
 
-#### -R / --clean-all
+#### -D / --clean-all
 
 Delete everything inside the /backups folder, including archives
 
-#### -r / --clean-archives
+#### -d / --clean-archives
 
 Delete everything inside the `archives` folder
+
+#### -r / --restore (NOT YET IMPLEMENTED)
+
+Restore the selected backup
 
 ## Run
 
