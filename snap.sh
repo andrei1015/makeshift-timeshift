@@ -20,31 +20,38 @@ list(){
     #     echo "Archives folder does not exist."
     # fi
     
-    local directory="${root}/archives/"
+    folder_path="${root}/archives/"
     
-    if [ ! -d "$directory" ]; then
-        echo "Archives folder does not exist"
+    # Check if folder exists
+    if [ ! -d "$folder_path" ]; then
+        echo "Folder does not exist"
         return 1
     fi
     
-    echo "----------------------------------------"
-    echo "Name        | Type       | Size (bytes)"
-    echo "----------------------------------------"
-    for file in "$directory"/*; do
-        if [ -f "$file" ]; then
-            file_type="File"
-            elif [ -d "$file" ]; then
-            file_type="Directory"
-        else
-            file_type="Unknown"
-        fi
+    # Get the list of files in the folder
+    files=$(ls "$folder_path")
+    
+    # Check if folder is empty
+    if [ -z "$files" ]; then
+        echo "Folder is empty"
+        return 0
+    fi
+    
+    # Print table header
+    printf "%-20s %-10s\n" "Filename" "Size"
+    
+    # Loop through each file in the folder
+    for file in $files; do
+        # Get the filename without extension
+        filename=$(basename "$file")
+        filename_no_ext="${filename%.*}"
         
-        file_size=$(du -b "$file" | cut -f1)
-        file_name=$(basename "$file")
+        # Get the file size
+        size=$(du -sh "$folder_path/$file" | awk '{print $1}')
         
-        printf "%-12s | %-10s | %12s\n" "$file_name" "$file_type" "$file_size"
+        # Print the filename and size in table format
+        printf "%-20s %-10s\n" "$filename_no_ext" "$size"
     done
-    echo "----------------------------------------"
 }
 
 clean_everything() {
