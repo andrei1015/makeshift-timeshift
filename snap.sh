@@ -10,7 +10,52 @@ snapshot() {
     rm -rf "${current_folder}"
 }
 
-snapshot
+clean_everything() {
+    rm -rf ${root}/
+}
+
+clean_archives() {
+    # Prompt for confirmation
+    read -p "Are you sure you want to delete the archives directory? (y/n): " choice
+    
+    case "$choice" in
+        [Yy])
+            rm -rf "${root}/archives/"
+            echo "Archives directory deleted."
+        ;;
+        [Nn])
+            echo "Operation canceled."
+        ;;
+        *)
+            echo "Invalid choice. Operation canceled."
+        ;;
+    esac
+}
+
+if [ $# -eq 0 ]; then
+    echo "No arguments provided"
+fi
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -c|--create)
+            snapshot
+            shift
+        ;;
+        -R|--clean-all)
+            clean_everything
+            shift
+        ;;
+        -r|--clean-archives)
+            clean_archives
+            shift
+        ;;
+        *)
+            echo "show help"
+            exit 1
+        ;;
+    esac
+done
 
 # echo "${current_folder}"
 # echo "${root}"
