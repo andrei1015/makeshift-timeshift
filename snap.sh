@@ -4,21 +4,48 @@ folder=$(date +'%Y-%m-%d-%H-%M-%S')
 current_folder="${root}/${folder}"
 
 # FUNCTIONS
-
-list(){
-    # Check if the archives folder exists
-    if [ -d "${root}/archives/" ]; then
-        ls -aAsh --si "${root}/archives/"
-    else
-        echo "Archives folder does not exist."
-    fi
-}
+# -------------------------------------------------------
 
 snapshot() {
     mkdir -p "${root}/archives"
     rsync -aAXHv --mkpath --include-from='include.list' --exclude-from='exclude.list' --exclude="${root}" / "${current_folder}"
     tar cvf "${root}/archives/${folder}.tar" "${current_folder}"
     rm -rf "${current_folder}"
+}
+
+list(){
+    # if [ -d "${root}/archives/" ]; then
+    #     ls -aAsh --si "${root}/archives/"
+    # else
+    #     echo "Archives folder does not exist."
+    # fi
+    
+    local directory="${root}/archives/"
+    
+    # Check if the directory exists
+    if [ ! -d "$directory" ]; then
+        echo "Directory does not exist: $directory"
+        return 1
+    fi
+    
+    echo "----------------------------------------"
+    echo "Name        | Type       | Size (bytes)"
+    echo "----------------------------------------"
+    for file in "$directory"/*; do
+        if [ -f "$file" ]; then
+            file_type="File"
+            elif [ -d "$file" ]; then
+            file_type="Directory"
+        else
+            file_type="Unknown"
+        fi
+        
+        file_size=$(du -b "$file" | cut -f1)
+        file_name=$(basename "$file")
+        
+        printf "%-12s | %-10s | %12s\n" "$file_name" "$file_type" "$file_size"
+    done
+    echo "----------------------------------------"
 }
 
 clean_everything() {
@@ -58,6 +85,7 @@ clean_archives() {
 
 
 # MENU
+# -------------------------------------------------------
 
 if [ $# -eq 0 ]; then
     echo "No arguments provided"
