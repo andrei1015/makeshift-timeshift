@@ -3,6 +3,17 @@ root='/backups'
 folder=$(date +'%Y-%m-%d-%H-%M-%S')
 current_folder="${root}/${folder}"
 
+# FUNCTIONS
+
+list(){
+    # Check if the archives folder exists
+    if [ -d "${root}/archives/" ]; then
+        ls -aAsh --si "${root}/archives/"
+    else
+        echo "Archives folder does not exist."
+    fi
+}
+
 snapshot() {
     mkdir -p "${root}/archives"
     rsync -aAXHv --mkpath --include-from='include.list' --exclude-from='exclude.list' --exclude="${root}" / "${current_folder}"
@@ -11,26 +22,42 @@ snapshot() {
 }
 
 clean_everything() {
-    rm -rf ${root}/
-}
-
-clean_archives() {
-    # Prompt for confirmation
-    read -p "Are you sure you want to delete the archives directory? (y/n): " choice
+    read -p "Are you sure you want to perform a full cleanup of backups? (y/N): " choice
     
     case "$choice" in
         [Yy])
-            rm -rf "${root}/archives/"
+            rm -rf "${root}/*"
             echo "Archives directory deleted."
         ;;
         [Nn])
             echo "Operation canceled."
         ;;
         *)
-            echo "Invalid choice. Operation canceled."
+            echo "Operation canceled."
+        ;;
+    esac
+    rm -rf ${root}/*
+}
+
+clean_archives() {
+    read -p "Are you sure you want to delete the archives directory? (y/N): " choice
+    
+    case "$choice" in
+        [Yy])
+            rm -rf "${root}/archives/*"
+            echo "Archives directory deleted."
+        ;;
+        [Nn])
+            echo "Operation canceled."
+        ;;
+        *)
+            echo "Operation canceled."
         ;;
     esac
 }
+
+
+# MENU
 
 if [ $# -eq 0 ]; then
     echo "No arguments provided"
@@ -40,6 +67,10 @@ while [[ $# -gt 0 ]]; do
     case $1 in
         -c|--create)
             snapshot
+            shift
+        ;;
+        -l|--list)
+            list
             shift
         ;;
         -R|--clean-all)
@@ -56,9 +87,3 @@ while [[ $# -gt 0 ]]; do
         ;;
     esac
 done
-
-# echo "${current_folder}"
-# echo "${root}"
-# echo "${folder}"
-# echo "rsync -aAXHv --mkpath --include-from='include.list' --exclude-from='exclude.list' --exclude='${folder}' / '${current_folder}'"
-# echo "tar cvf '${root}/archives/${folder}.tar' '${current_folder}'"
