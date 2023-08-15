@@ -22,9 +22,8 @@ list(){
     
     local directory="${root}/archives/"
     
-    # Check if the directory exists
     if [ ! -d "$directory" ]; then
-        echo "Directory does not exist: $directory"
+        echo "Archives folder does not exist"
         return 1
     fi
     
