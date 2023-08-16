@@ -38,8 +38,18 @@ Go to the project directory
   cd makeshift-timeshift
 ```
 
-Run the script to create a new snapshot (or whatever)
+(make the file executable)Run the script to create a new snapshot (or whatever)
 
 ```bash
   sudo ./snap.sh -c
 ```
+
+You can also add an alias into your .bashrc file
+
+```bash
+alias mkshift='~/makeshift-timeshift/snap.sh'
+```
+
+## Disclaimer
+
+Needless to say, I am not responsible for what horrible things might happen to you on restore. Good luck!
